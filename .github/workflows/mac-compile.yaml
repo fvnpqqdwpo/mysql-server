@@ -1,0 +1,47 @@
+name: GitHub Actions Demo
+run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+on: [push]
+jobs:
+  Explore-GitHub-Actions:
+    runs-on: macos-latest
+    steps:
+      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: echo "🍏 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+      - name: upgrade macos
+        run: softwareupdate -i -a
+      - name: install cmake
+        run: brew install cmake
+      - name: install deps
+        run: brew install cmake openssl zstd ncurses readline bison pkg-config
+
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      
+      - name: Initialize and update submodules
+        run: |
+          git submodule init
+          git submodule update
+
+      - name: Install vcpkg
+        run: |
+          git clone https://github.com/microsoft/vcpkg.git
+          ./vcpkg/bootstrap-vcpkg.sh
+
+      - name: Install Boost using vcpkg
+        run: |
+          ./vcpkg/vcpkg install boost ffmpeg ace poco
+
+      - name: Cache vcpkg packages
+        uses: actions/cache@v3
+        with:
+          path: ./vcpkg/installed
+          key: ${{ runner.os }}-vcpkg-${{ hashFiles('vcpkg.json') }}
+
+      - name: generate gcc project
+        run: mkdir build && cd build && cmake .. -DWITH_DEBUG=1 
+
+      - name: compile mysql-server
+        run: cd build && make -j 44
+        
+      - run: echo "🍏 This job's status is ${{ job.status }}."
