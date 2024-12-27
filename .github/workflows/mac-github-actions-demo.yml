@@ -3,17 +3,17 @@ run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 on: [push]
 jobs:
   Explore-GitHub-Actions:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+      - run: echo "🍏 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
       - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-      - name: upgrade ubuntu
-        run: sudo apt update && sudo apt upgrade -y
+      - name: upgrade macos
+        run: softwareupdate -i -a
       - name: install cmake
-        run: sudo apt install cmake -y
+        run: brew install cmake
       - name: install deps
-        run: sudo apt install cmake libssl-dev libzstd-dev libncurses5-dev libreadline-dev bison pkg-config -y
+        run: brew install cmake openssl zstd ncurses readline bison pkg-config
 
       # - name: Check out repository code
       #   uses: actions/checkout@v4
