@@ -14,6 +14,11 @@ jobs:
         run: sudo apt install cmake -y
       - name: install  deps
         run: sudo apt install cmake libssl-dev libzstd-dev libncurses5-dev libreadline-dev bison pkg-config -y
+        
       - name: Check out repository code
         uses: actions/checkout@v4
+
+      - name: generate gcc project
+        run: mkdir build && cd build && cmake .. -DWITH_DEBUG=1 -DDOWNLOAD_BOOST=1 -DWITH_BOOST=./
+        
       - run: echo "🍏 This job's status is ${{ job.status }}."
