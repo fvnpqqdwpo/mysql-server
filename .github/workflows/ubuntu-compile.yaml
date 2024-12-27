@@ -1,0 +1,47 @@
+name: GitHub Actions Demo
+run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+on: [push]
+jobs:
+  Explore-GitHub-Actions:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+      - name: upgrade ubuntu
+        run: sudo apt update && sudo apt upgrade -y
+      - name: install cmake
+        run: sudo apt install cmake -y
+      - name: install deps
+        run: sudo apt install cmake libssl-dev libzstd-dev libncurses5-dev libreadline-dev bison pkg-config -y
+
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      
+      - name: Initialize and update submodules
+        run: |
+          git submodule init
+          git submodule update
+
+      - name: Install vcpkg
+        run: |
+          git clone https://github.com/microsoft/vcpkg.git
+          ./vcpkg/bootstrap-vcpkg.sh
+
+      - name: Install Boost using vcpkg
+        run: |
+          ./vcpkg/vcpkg install boost
+
+      - name: Cache vcpkg packages
+        uses: actions/cache@v3
+        with:
+          path: ./vcpkg/installed
+          key: ${{ runner.os }}-vcpkg-${{ hashFiles('vcpkg.json') }}
+
+      - name: generate gcc project
+        run: mkdir build && cd build && cmake .. -DWITH_DEBUG=1 
+
+      - name: compile mysql-server
+        run: cd build && make -j 4
+        
+      - run: echo "🍏 This job's status is ${{ job.status }}."
