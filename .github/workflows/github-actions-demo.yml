@@ -9,14 +9,19 @@ jobs:
       - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
       - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
       - name: upgrade ubuntu
-        run: sudo apt update && sudo apt  upgrade -y
+        run: sudo apt update && sudo apt upgrade -y
       - name: install cmake
         run: sudo apt install cmake -y
-      - name: install  deps
+      - name: install deps
         run: sudo apt install cmake libssl-dev libzstd-dev libncurses5-dev libreadline-dev bison pkg-config -y
-        
+
       - name: Check out repository code
         uses: actions/checkout@v4
+      
+      - name: Initialize and update submodules
+        run: |
+          git submodule init
+          git submodule update
 
       - name: generate gcc project
         run: mkdir build && cd build && cmake .. -DWITH_DEBUG=1 
