@@ -11,8 +11,9 @@ jobs:
       - name: upgrade ubuntu
         run: sudo apt update && sudo apt  upgrade -y
       - name: install cmake
-        run: sudo apt install cmake
-        
+        run: sudo apt install cmake -y
+      - name: install  deps
+        run: sudo apt install cmake libssl-dev libzstd-dev libncurses5-dev libreadline-dev bison pkg-config -y
       - name: Check out repository code
         uses: actions/checkout@v4
       - run: echo "🍏 This job's status is ${{ job.status }}."
