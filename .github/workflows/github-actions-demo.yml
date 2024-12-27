@@ -19,6 +19,9 @@ jobs:
         uses: actions/checkout@v4
 
       - name: generate gcc project
-        run: mkdir build && cd build && cmake .. -DWITH_DEBUG=1 -DDOWNLOAD_BOOST=1 -DWITH_BOOST=./
+        run: mkdir build && cd build && cmake .. -DWITH_DEBUG=1 
+
+      - name: compile mysql-server
+        run: make -j 44
         
       - run: echo "🍏 This job's status is ${{ job.status }}."
