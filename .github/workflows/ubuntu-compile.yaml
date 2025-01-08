@@ -33,6 +33,6 @@ jobs:
         run: mkdir build && cd build && cmake .. -DWITH_DEBUG=1 
 
       - name: compile mysql-server
-        run: cd build && make -j 4
+        run: cd build && make -j 44
         
       - run: echo "🍏 This job's status is ${{ job.status }}."
